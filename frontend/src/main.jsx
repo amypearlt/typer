@@ -40,8 +40,7 @@ function Typing_design() {
     <div>
       <h3>typing speed test</h3>
       <p>{quote}</p>
-      <textarea rows="3" cols="50" onFocus={Start_typing} onChange={Now_typing}/>
-      <button onClick={End_typing}>Submit</button>
+      <textarea rows="3" cols="50" onFocus={Start_typing} onChange={Now_typing} onKeyDown={(e) => {if (e.key == "Enter") {End_typing();}}} readOnly={!!result}/>
 
       {result && (
         <div>
