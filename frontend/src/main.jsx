@@ -37,20 +37,44 @@ function Typing_design() {
   }
 
   return (
-    <div>
-      <h3>typing speed test</h3>
-      <p>{quote}</p>
-      <textarea rows="3" cols="50" onFocus={Start_typing} onChange={Now_typing} onKeyDown={(e) => {if (e.key == "Enter") {End_typing();}}} readOnly={!!result}/>
+    <>
+      <div>
+        <h3>typing speed test</h3>
+        <p>
+          {quote.split("").map((char, index) => {
+            let typed_char = typed_quote[index]; 
+            let correct_name = ""; 
+            if (typed_char != null) {
+              correct_name = typed_char === char ? "correct" : "incorrect";
+            } 
+            
+            return (
+              <span key={index} className={correct_name}>
+                {char}
+              </span>
+            );
+            
+            })}
+          </p>
+          
+        <input type="text" autoFocus onFocus={Start_typing} onChange= {Now_typing} onKeyDown={(e) => {
+          if (e.key == "Enter") {
+            End_typing();
+          }}} readOnly={!!result}/>
 
-      {result && (
-        <div>
-          <p>{result.raw_wpm}</p>
-          <p>{result.accuracy}</p>
-          <p>{result.wpm}</p>
-        </div>
-      )}
+        {result && (
+          <div>
+            <p>Raw WPM: {result.raw_wpm}</p>
+            <p>Accuracy%: {result.accuracy}</p>
+            <p>WPM: {result.wpm}</p>
+          </div>
+        )}
+      </div>
 
-    </div>
+      <div>
+        <a href="https://github.com/amypearlt/typer">GitHub</a>
+      </div>
+    </>
   );
 }
 
