@@ -1,6 +1,6 @@
 {/*import { StrictMode } from 'react'*/}
 import { createRoot } from 'react-dom/client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './index.css'
 {/*import App from './App.jsx'*/}
 
@@ -11,14 +11,26 @@ function Typing_design() {
   const [end_time, set_end_time] = useState(null);
   const [result, set_result] = useState(null);
 
-  function Start_typing() {
-    set_start_time(Date.now());
-  }
+  useEffect(() => {
+    function Handle_key_down(e) {
+      if (!start_time) {
+        set_start_time(Date.now());
+      }
 
-  function Now_typing(e) {
-    set_end_time(Date.now());
-    set_typed_quote(e.target.value);
-  }
+      if (e.key.length === 1) {
+        set_typed_quote((prev) => prev + e.key);
+        set_end_time(Date.now());
+      } else if (e.key === "Backspace") {
+        set_typed_quote((prev) => prev.slice(0, -1));
+        set_end_time(Date.now());
+      } else if (e.key === "Enter") {
+        End_typing();
+      }
+    }
+
+    window.addEventListener("keydown", Handle_key_down);
+    return () => window.removeEventListener("keydown", Handle_key_down);
+  }, [start_time, end_time, typed_quote]);
 
   async function End_typing() {
     const response = await fetch("http://localhost:8080/api/typing/result", {
@@ -56,11 +68,6 @@ function Typing_design() {
             
             })}
           </p>
-          
-        <input type="text" autoFocus onFocus={Start_typing} onChange= {Now_typing} onKeyDown={(e) => {
-          if (e.key == "Enter") {
-            End_typing();
-          }}} readOnly={!!result}/>
 
         {result && (
           <div>
