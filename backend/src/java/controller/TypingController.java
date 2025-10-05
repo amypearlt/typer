@@ -1,7 +1,7 @@
-package com.example.demo.controller;
-import com.example.demo.model.TypingRequest;
-import com.example.demo.model.TypingResult;
-import com.example.demo.service.TypingService;
+package com.example.backend.controller;
+import com.example.backend.model.TypingRequest;
+import com.example.backend.model.TypingResult;
+import com.example.backend.service.TypingService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

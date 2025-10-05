@@ -1,5 +1,5 @@
-package com.example.demo.service;
-import com.example.demo.model.TypingResult;
+package com.example.backend.service;
+import com.example.backend.model.TypingResult;
 
 import org.springframework.stereotype.Service;
 

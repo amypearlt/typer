@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.backend.model;
 
 public class TypingRequest {
     private String quote;

@@ -5,13 +5,27 @@ import './index.css'
 {/*import App from './App.jsx'*/}
 
 function Typing_design() {
-  const quote = "The quick brown fox jumps over the lazy dog.";
+  const [quote, set_quote] = useState("");
   const [typed_quote, set_typed_quote] = useState("");
   const [start_time, set_start_time] = useState(null);
   const [end_time, set_end_time] = useState(null);
   const [result, set_result] = useState(null);
 
+  async function Fetch_quote() {
+    const response = await fetch("http://localhost:8080/api/typing/quote");
+    const data = await response.json();
+    set_quote(data.quote);
+  }
+
   useEffect(() => {
+    async function loadQuote() {
+      try {
+        await Fetch_quote();
+      } catch {
+        set_quote("Failed to load quote. Please refresh.");
+      }
+    }
+    loadQuote();
     function Handle_key_down(e) {
       if (!start_time) {
         set_start_time(Date.now());
@@ -27,10 +41,9 @@ function Typing_design() {
         End_typing();
       }
     }
-
     window.addEventListener("keydown", Handle_key_down);
     return () => window.removeEventListener("keydown", Handle_key_down);
-  }, [start_time, end_time, typed_quote]);
+  }, []);
 
   async function End_typing() {
     const response = await fetch("http://localhost:8080/api/typing/result", {
@@ -52,6 +65,7 @@ function Typing_design() {
     <>
       <div>
         <h3>typing speed test</h3>
+        <p>{quote}</p>
         <p>
           {quote.split("").map((char, index) => {
             let typed_char = typed_quote[index]; 
@@ -71,9 +85,9 @@ function Typing_design() {
 
         {result && (
           <div>
-            <p>Raw WPM: {result.raw_wpm}</p>
-            <p>Accuracy%: {result.accuracy}</p>
-            <p>WPM: {result.wpm}</p>
+            <p>Raw WPM: <b>{result.raw_wpm}</b></p>
+            <p>Accuracy%: <b>{result.accuracy}</b></p>
+            <p>WPM: <b>{result.wpm}</b></p>
           </div>
         )}
       </div>
