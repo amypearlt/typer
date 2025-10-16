@@ -17,15 +17,19 @@ function Typing_design() {
     set_quote(data.quote);
   }
 
-  useEffect(() => {
-    async function loadQuote() {
-      try {
-        await Fetch_quote();
-      } catch {
-        set_quote("Failed to load quote. Please refresh.");
-      }
+  async function loadQuote() {
+    try {
+      await Fetch_quote();
+    } catch {
+      set_quote("Failed to load quote. Please refresh.");
     }
-    loadQuote();
+  }
+
+  useEffect(() => {
+    Fetch_quote();
+  }, []);
+
+  useEffect(() => {
     function Handle_key_down(e) {
       if (!start_time) {
         set_start_time(Date.now());
@@ -43,18 +47,25 @@ function Typing_design() {
     }
     window.addEventListener("keydown", Handle_key_down);
     return () => window.removeEventListener("keydown", Handle_key_down);
-  }, []);
+  }, [start_time, typed_quote]);
 
   async function End_typing() {
+    const final_quote = quote;
+    const final_typed_quote = typed_quote;
+    const final_start_time = start_time;
+    const final_end_time = Date.now(); 
+    const payload = {
+      quote: final_quote,
+      typed_quote: final_typed_quote,
+      start_time: final_start_time,
+      end_time: final_end_time
+    };
+    console.log("Sending to backend:", payload);
+
     const response = await fetch("http://localhost:8080/api/typing/result", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        quote,
-        typed_quote,
-        start_time,
-        end_time
-      }),
+      body: JSON.stringify(payload),
     });
 
     const data = await response.json();
@@ -65,7 +76,6 @@ function Typing_design() {
     <>
       <div>
         <h3>typing speed test</h3>
-        <p>{quote}</p>
         <p>
           {quote.split("").map((char, index) => {
             let typed_char = typed_quote[index]; 
