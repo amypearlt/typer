@@ -1,7 +1,7 @@
 package com.service;
-import com.model.TypingResult;
-
 import org.springframework.stereotype.Service;
+
+import com.model.TypingResult;
 
 @Service
 public class TypingService {
@@ -13,12 +13,17 @@ public class TypingService {
 
         String[] words = quote.split("\\s+");
         int correct_words = 0;
-        for (int i = 0; i < typed_words.length; i++) {
-            if (i < words.length && typed_words[i].equals(words[i])) {
+        for (int i = 0; i < Math.min(words.length, typed_words.length); i++) {
+            if (typed_words[i].equals(words[i])) {
                 correct_words++;
             }
         }
-        int wpm = (int)Math.round(correct_words / time_typed);
+        int words_difference = Math.abs(words.length - typed_words.length); // Penalising untyped/extra words.
+        int complete_words = correct_words - words_difference;
+        if (complete_words < 0) {
+            complete_words = 0;
+        }
+        int wpm = (int)Math.round(complete_words / time_typed);
 
         double accuracy = Math.round((((double)correct_words / words.length) * 100) * 10.0) / 10.0; // Rounded to 1 decimal place.
 

@@ -17,7 +17,7 @@ function Typing_design() {
     set_quote(data.quote);
   }
 
-  async function loadQuote() {
+  async function Load_quote() {
     try {
       await Fetch_quote();
     } catch {
@@ -26,7 +26,7 @@ function Typing_design() {
   }
 
   useEffect(() => {
-    Fetch_quote();
+    Load_quote();
   }, []);
 
   useEffect(() => {
@@ -42,6 +42,10 @@ function Typing_design() {
         set_typed_quote((prev) => prev.slice(0, -1));
         set_end_time(Date.now());
       } else if (e.key === "Enter") {
+        End_typing();
+      }
+
+      if (quote === typed_quote) {
         End_typing();
       }
     }
