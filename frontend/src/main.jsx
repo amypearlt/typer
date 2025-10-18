@@ -36,26 +36,25 @@ function Typing_design() {
       }
 
       if (e.key.length === 1) {
-        set_typed_quote((prev) => prev + e.key);
+        const updated = (prev) => prev + e.key;
+        set_typed_quote(updated);
         set_end_time(Date.now());
+        if (updated === quote) {
+          End_typing(updated);
+        }
       } else if (e.key === "Backspace") {
         set_typed_quote((prev) => prev.slice(0, -1));
         set_end_time(Date.now());
       } else if (e.key === "Enter") {
         End_typing();
       }
-
-      if (quote === typed_quote) {
-        End_typing();
-      }
     }
     window.addEventListener("keydown", Handle_key_down);
     return () => window.removeEventListener("keydown", Handle_key_down);
-  }, [start_time, typed_quote]);
+  }, [quote, start_time, typed_quote]);
 
-  async function End_typing() {
+  async function End_typing(final_typed_quote = typed_quote) {
     const final_quote = quote;
-    const final_typed_quote = typed_quote;
     const final_start_time = start_time;
     const final_end_time = Date.now(); 
     const payload = {
