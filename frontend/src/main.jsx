@@ -36,7 +36,7 @@ function Typing_design() {
       }
 
       if (e.key.length === 1) {
-        const updated = (prev) => prev + e.key;
+        const updated = typed_quote + e.key;
         set_typed_quote(updated);
         set_end_time(Date.now());
         if (updated === quote) {
@@ -77,9 +77,9 @@ function Typing_design() {
 
   return (
     <>
+      <div className="header"><h2>typing...</h2></div>
       <div>
-        <h3>typing speed test</h3>
-        <p>
+        <p className="quote">
           {quote.split("").map((char, index) => {
             let typed_char = typed_quote[index]; 
             let correct_name = ""; 
@@ -93,8 +93,8 @@ function Typing_design() {
               </span>
             );
             
-            })}
-          </p>
+          })}
+        </p>
 
         {result && (
           <div>
