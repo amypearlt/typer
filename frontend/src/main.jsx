@@ -10,12 +10,13 @@ function Typing_design() {
   const [start_time, set_start_time] = useState(null);
   const [end_time, set_end_time] = useState(null);
   const [result, set_result] = useState(null);
+  const [finished, set_finished] = useState(false);
 
   async function Fetch_quote() {
-    const response = await fetch("http://localhost:8080/api/typing/quote");
+    const response = await fetch(`https://api.quotable.io/quotes/random/?limit=3&cacheBust=${Date.now()}`);
     const data = await response.json();
-    set_quote(data.quote);
-  }
+    set_quote(data.map(q => q.content).join(" "));
+  };
 
   async function Load_quote() {
     try {
@@ -31,6 +32,8 @@ function Typing_design() {
 
   useEffect(() => {
     function Handle_key_down(e) {
+      if (finished) return;
+
       if (!start_time) {
         set_start_time(Date.now());
       }
@@ -40,6 +43,15 @@ function Typing_design() {
         set_typed_quote(updated);
         set_end_time(Date.now());
         if (updated === quote) {
+          End_typing(updated);
+        }
+
+        const quote_words = quote.trim().split(/\s+/);
+        const quote_last_word = quote_words[quote_words.length - 1];
+        const typed_words = updated.trim().split(/\s+/);
+        const typed_last_word = typed_words[typed_words.length - 1];
+
+        if (typed_last_word === quote_last_word) {
           End_typing(updated);
         }
       } else if (e.key === "Backspace") {
@@ -54,6 +66,8 @@ function Typing_design() {
   }, [quote, start_time, typed_quote]);
 
   async function End_typing(final_typed_quote = typed_quote) {
+    if (finished) return;
+    set_finished(true);
     const final_quote = quote;
     const final_start_time = start_time;
     const final_end_time = Date.now(); 
@@ -65,7 +79,7 @@ function Typing_design() {
     };
     console.log("Sending to backend:", payload);
 
-    const response = await fetch("http://localhost:8080/api/typing/result", {
+    const response = await fetch("http://localhost:8081/api/typing/result", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -85,11 +99,12 @@ function Typing_design() {
             let correct_name = ""; 
             if (typed_char != null) {
               correct_name = typed_char === char ? "correct" : "incorrect";
-            } 
+            }
             
             return (
               <span key={index} className={correct_name}>
                 {char}
+                {index === typed_quote.length - 1 && !finished && <span className="cursor"></span>}
               </span>
             );
             

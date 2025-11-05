@@ -1,16 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
 :root {
-  font-family: "Courier New";
+  font-family: "Courier Prime";
   line-height: 1.5;
   background-color: #2B2B2B;
 }
 
 a {
-  font-family: Arial;
-  color: #646cff;
-  text-decoration: inherit;
+  color: lightgrey;
+  padding-left: 48.5%;
+  line-height: 4;
 }
 a:hover {
-  color: #535bf2;
+  color: grey;
 }
 
 body {
@@ -22,34 +24,25 @@ body {
 h2 {
   color: white;
   justify-content: left;
+  padding-left: 1%;
 }
 
 p {
   text-align: center;
-  color: white;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  color:white;
 }
 
 .correct {
-  color: green;
+  color: white;
 }
 .incorrect {
   color: red;
 }
 
 .quote {
+  padding-left: 12.5%;
+  padding-right: 12.5%;
+  color: lightgrey;
   font-size: 1.5em;
 }
 
@@ -60,4 +53,21 @@ p {
   display: flex;
   margin: auto;
   height: 60px;
+}
+
+.cursor {
+  display: inline-block;
+  position:absolute;
+  width: 0.1ch;
+  height: 1em;
+  margin-left: 1px;
+  background: white;
+  animation: blink 1s steps(2, start) infinite;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
 }
