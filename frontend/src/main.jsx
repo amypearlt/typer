@@ -26,6 +26,16 @@ function Typing_design() {
     }
   }
 
+  async function Reset_fetch () {
+    set_typed_quote("");
+    set_start_time(null);
+    set_end_time(null);
+    set_result(null);
+    set_finished(false);
+
+    Load_quote();
+  }
+
   useEffect(() => {
     Load_quote();
   }, []);
@@ -116,6 +126,7 @@ function Typing_design() {
             <p>Raw WPM: <b>{result.raw_wpm}</b></p>
             <p>Accuracy%: <b>{result.accuracy}</b></p>
             <p>WPM: <b>{result.wpm}</b></p>
+            <p onClick={Reset_fetch}><b>Redo?</b></p>
           </div>
         )}
       </div>
