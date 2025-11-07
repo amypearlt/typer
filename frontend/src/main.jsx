@@ -22,17 +22,16 @@ function Typing_design() {
     try {
       await Fetch_quote();
     } catch {
-      set_quote("Failed to load quote. Please refresh.");
+      set_quote("Failed to load quote. Refresh or check your Internet connection.");
     }
   }
 
-  async function Reset_fetch () {
+  async function Reset_fetch() {
     set_typed_quote("");
     set_start_time(null);
     set_end_time(null);
     set_result(null);
     set_finished(false);
-
     Load_quote();
   }
 
