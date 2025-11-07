@@ -1,7 +1,7 @@
 {/*import { StrictMode } from 'react'*/}
-import { createRoot } from 'react-dom/client';
-import { useState, useEffect } from "react";
-import './index.css'
+import { createRoot } from "react-dom/client";
+import { useState, useEffect, useRef } from "react";
+import "./index.css"
 {/*import App from './App.jsx'*/}
 
 function Typing_design() {
@@ -10,7 +10,7 @@ function Typing_design() {
   const [start_time, set_start_time] = useState(null);
   const [end_time, set_end_time] = useState(null);
   const [result, set_result] = useState(null);
-  const [finished, set_finished] = useState(false);
+  const finished_ref = useRef(false); 
 
   async function Fetch_quote() {
     const response = await fetch(`https://api.quotable.io/quotes/random/?limit=3&cacheBust=${Date.now()}`);
@@ -27,11 +27,12 @@ function Typing_design() {
   }
 
   async function Reset_fetch() {
+    finished_ref.current = false;
+    set_quote("");
     set_typed_quote("");
     set_start_time(null);
     set_end_time(null);
     set_result(null);
-    set_finished(false);
     Load_quote();
   }
 
@@ -41,7 +42,11 @@ function Typing_design() {
 
   useEffect(() => {
     function Handle_key_down(e) {
-      if (finished) return;
+      if (finished_ref.current) {
+        if (e.key === "Enter") {
+          Reset_fetch();
+        } else {return}
+      }
 
       if (!start_time) {
         set_start_time(Date.now());
@@ -67,7 +72,7 @@ function Typing_design() {
         set_typed_quote((prev) => prev.slice(0, -1));
         set_end_time(Date.now());
       } else if (e.key === "Enter") {
-        End_typing();
+        Reset_fetch();
       }
     }
     window.addEventListener("keydown", Handle_key_down);
@@ -75,8 +80,8 @@ function Typing_design() {
   }, [quote, start_time, typed_quote]);
 
   async function End_typing(final_typed_quote = typed_quote) {
-    if (finished) return;
-    set_finished(true);
+    if (finished_ref.current) return;
+    finished_ref.current = true;
     const final_quote = quote;
     const final_start_time = start_time;
     const final_end_time = Date.now(); 
@@ -101,7 +106,7 @@ function Typing_design() {
   return (
     <>
       <div className="header"><h2>typing...</h2></div>
-      <div>
+      <div className="quotebox">
         <p className="quote">
           {quote.split("").map((char, index) => {
             let typed_char = typed_quote[index]; 
@@ -112,26 +117,37 @@ function Typing_design() {
             
             return (
               <span key={index} className={correct_name}>
+                {index === typed_quote.length && !finished_ref.current && <span className="cursor"></span>}
                 {char}
-                {index === typed_quote.length - 1 && !finished && <span className="cursor"></span>}
               </span>
             );
             
           })}
         </p>
+        <p onClick={Reset_fetch} className="newquote"><b>New quote?</b></p>
+      </div>
 
+      <div>
         {result && (
-          <div>
-            <p>Raw WPM: <b>{result.raw_wpm}</b></p>
-            <p>Accuracy%: <b>{result.accuracy}</b></p>
-            <p>WPM: <b>{result.wpm}</b></p>
-            <p onClick={Reset_fetch}><b>Redo?</b></p>
+          <div className = "resultbox">
+            <div className = "result">
+              <div className="wpmextra">
+                <p>Raw WPM: <b>{result.raw_wpm}</b></p>
+                <p>Accuracy%: <b>{result.accuracy}</b></p>
+                <div className="wpmlinks">
+                  <p className="morestats"><b>More stats...</b></p>
+                  <p className="stats">Words: </p>
+                  <p onClick={Reset_fetch} className="redo"><b>Redo?</b></p>
+                </div>
+              </div>
+              <p className="wpm">WPM<br></br><b>{result.wpm}</b></p>
+            </div>
           </div>
         )}
       </div>
 
-      <div>
-        <a href="https://github.com/amypearlt/typer">GitHub</a>
+      <div> 
+        <a href="https://github.com/amypearlt/typer" target="_blank">GitHub</a>
       </div>
     </>
   );

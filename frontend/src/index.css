@@ -2,17 +2,7 @@
 
 :root {
   font-family: "Courier Prime";
-  line-height: 1.5;
   background-color: #2B2B2B;
-}
-
-a {
-  color: lightgrey;
-  padding-left: 48.5%;
-  line-height: 4;
-}
-a:hover {
-  color: grey;
 }
 
 body {
@@ -28,7 +18,6 @@ h2 {
 }
 
 p {
-  text-align: center;
   color:white;
   position:relative;
 }
@@ -40,14 +29,64 @@ p {
   color: red;
 }
 
+.quotebox {
+  text-align: center;
+  margin-left: 20%;
+  margin-right: 20%;
+  opacity: 0;
+  animation: fadein 2.5s forwards;
+  animation-delay: 0.75s;
+}
+@keyframes fadein {
+  to {
+    opacity: 1;
+  }
+}
+
 .quote {
   padding-left: 1%;
   padding-right: 1%;
+  margin-top:15%;
   color: lightgrey;
   font-size: 1.5em;
   background-color: #212121;
-  margin-left: 25%;
-  margin-right: 25%;
+  padding-top:0.5%;
+  padding-bottom:0.5%;
+  border-radius: 5px;  
+  border: 0.5px solid grey;
+  line-height: 1.5;
+}
+
+.resultbox {
+  margin: auto;  
+  max-width:400px;
+  opacity:0;
+  animation: fadein 2s forwards;
+  animation-delay: 0.2s;
+  position: relative;
+}
+
+.result {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wpm {
+  background-color: #212121;
+  border-radius: 5px;
+  border: 0.5px solid grey;
+  font-size: 2em;
+  display:inline-block;
+  text-align: center;
+  padding: 0.2em 0.7em;
+  line-height: 1; 
+}
+
+.wpmextra {
+  font-size: 1.6em;
+  line-height: 0.3em;
+  display: inline-block;
 }
 
 .header {
@@ -57,6 +96,7 @@ p {
   display: flex;
   margin: auto;
   height: 60px;
+  border-bottom: 2px solid white;
 }
 
 .cursor {
@@ -74,4 +114,47 @@ p {
   to {
     visibility: hidden;
   }
+}
+
+.newquote {
+  text-align: right;
+  margin-top: -1.5%;
+  transition:0.35s;
+  text-decoration: underline transparent;
+}
+.newquote:hover {text-decoration: underline}
+
+.wpmlinks {
+  font-size: 1rem;
+  line-height: 0.01;
+}
+
+.morestats {
+  transition:0.35s;
+  text-decoration: underline transparent;
+}
+.morestats:hover {text-decoration: underline}
+.morestats:hover + .stats {display:block}
+
+.stats {
+  display: none;
+  text-align: center;
+}
+
+.redo {
+  transition:0.35s;
+  text-decoration: underline transparent;
+  position: absolute;
+  bottom:0;
+}
+.redo:hover {text-decoration: underline}
+
+a {
+  color: lightgrey;
+  padding-left: 48.5%;
+  line-height: 6;
+  transition: 0.3s;
+}
+a:hover {
+  color: grey;
 }
