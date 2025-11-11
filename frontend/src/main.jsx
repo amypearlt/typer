@@ -51,8 +51,9 @@ function Typing_design() {
       if (!start_time) {
         set_start_time(Date.now());
       }
-
-      if (e.key.length === 1) {
+      
+      if (e.key === " ") {
+      } else if (e.key.length === 1) {
         const updated = typed_quote + e.key;
         set_typed_quote(updated);
         set_end_time(Date.now());
@@ -136,7 +137,6 @@ function Typing_design() {
                 <p>Accuracy%: <b>{result.accuracy}</b></p>
                 <div className="wpmlinks">
                   <p className="morestats"><b>More stats...</b></p>
-                  <p className="stats">Words: </p>
                   <p onClick={Reset_fetch} className="redo"><b>Redo?</b></p>
                 </div>
               </div>
