@@ -11,10 +11,40 @@
     margin:0;
   }
 
-  h2 {
+  .header {
+    position: sticky;
+    top: 0;
+    background-color: #171717;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    align-items: center;
+    height: 60px;
+    border-bottom: 2px solid white;
+  }
+
+  .headerlink {
+    display:flex;
+    list-style-type: none;
+    gap:1em;
     color: white;
-    justify-content: left;
     padding-left: 1%;
+    font-size: 1.5em;
+    text-align: center;
+  }
+
+  .headerright {
+    list-style-type: none;
+    color: white;
+    font-size: 2em;
+    margin-left: auto;
+    padding-right:1%;
+    color:lightgrey;
+    transition: 0.3s;
+  }
+
+  .headerright:hover {
+    color:white
   }
 
   p {
@@ -87,16 +117,6 @@
     font-size: 1.6em;
     line-height: 0.3em;
     display: inline-block;
-  }
-
-  .header {
-    position: sticky;
-    top: 0;
-    background-color: #171717;
-    display: flex;
-    margin: auto;
-    height: 60px;
-    border-bottom: 2px solid white;
   }
 
   .cursor {

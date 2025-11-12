@@ -52,7 +52,25 @@ function Typing_design() {
         set_start_time(Date.now());
       }
       
-      if (e.key === " ") {
+      if (e.key === " " && e.repeat) {
+        return;
+      } else if (e.key === " ") {
+        if (typed_quote.length >= quote.length) return;
+        let next_index = typed_quote.length;
+        let next_character = quote[next_index];
+        const max_index = quote.length - 1;
+        let updated = typed_quote;
+        if (next_character === " ") {
+          updated += " ";
+        } else {
+          while (next_index < max_index && next_character !== " ") {
+            updated += "█";
+            next_character = quote[++next_index];
+          }
+          if (next_index <= max_index) {updated += " "}
+        }
+        set_typed_quote(updated);
+        set_end_time(Date.now());
       } else if (e.key.length === 1) {
         const updated = typed_quote + e.key;
         set_typed_quote(updated);
@@ -65,8 +83,7 @@ function Typing_design() {
         const quote_last_word = quote_words[quote_words.length - 1];
         const typed_words = updated.trim().split(/\s+/);
         const typed_last_word = typed_words[typed_words.length - 1];
-
-        if (typed_last_word === quote_last_word) {
+        if (typed_last_word === quote_last_word && typed_words === quote_words) {
           End_typing(updated);
         }
       } else if (e.key === "Backspace") {
@@ -106,7 +123,12 @@ function Typing_design() {
 
   return (
     <>
-      <div className="header"><h2>typing...</h2></div>
+      <div className="header">
+        <ul className="headerlink">
+          <li><b>typing...</b></li>
+        </ul>
+        <li className="headerright">o</li>
+      </div>
       <div className="quotebox">
         <p className="quote">
           {quote.split("").map((char, index) => {
