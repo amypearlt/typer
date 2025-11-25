@@ -57,20 +57,32 @@ function Typing_design() {
       } else if (e.key === " ") {
         if (typed_quote.length >= quote.length) return;
         let next_index = typed_quote.length;
-        let next_character = quote[next_index];
         const max_index = quote.length - 1;
         let updated = typed_quote;
-        if (next_character === " ") {
+        if (quote[next_index] === " ") {
           updated += " ";
+          next_index++;
         } else {
-          while (next_index < max_index && next_character !== " ") {
+          while (next_index <= max_index && quote[next_index] !== " ") {
             updated += "█";
-            next_character = quote[++next_index];
+            next_index++;
           }
-          if (next_index <= max_index) {updated += " "}
+          if (next_index <= max_index && quote[next_index] === " ") {
+            updated += " "
+            next_index++;
+          }
         }
         set_typed_quote(updated);
         set_end_time(Date.now());
+
+        const quote_words = quote.trim().split(/\s+/);
+        const typed_words = updated.trim().split(/\s+/);
+        const last_word_index = quote_words.length - 1;
+        const last_quote_word = quote_words[last_word_index];
+        const last_typed_word = typed_words[last_word_index] || "";
+        if (last_typed_word.length >= last_quote_word.length) {
+          End_typing(updated);
+        }
       } else if (e.key.length === 1) {
         const updated = typed_quote + e.key;
         set_typed_quote(updated);
@@ -80,10 +92,11 @@ function Typing_design() {
         }
 
         const quote_words = quote.trim().split(/\s+/);
-        const quote_last_word = quote_words[quote_words.length - 1];
         const typed_words = updated.trim().split(/\s+/);
-        const typed_last_word = typed_words[typed_words.length - 1];
-        if (typed_last_word === quote_last_word && typed_words === quote_words) {
+        const last_word_index = quote_words.length - 1;
+        const last_quote_word = quote_words[last_word_index];
+        const last_typed_word = typed_words[last_word_index] || "";
+        if (last_typed_word.length >= last_quote_word.length) {
           End_typing(updated);
         }
       } else if (e.key === "Backspace") {
@@ -135,13 +148,18 @@ function Typing_design() {
             let typed_char = typed_quote[index]; 
             let correct_name = ""; 
             if (typed_char != null) {
-              correct_name = typed_char === char ? "correct" : "incorrect";
+              if (typed_char === char) {
+                correct_name = "correct";
+              } else {
+                correct_name = "incorrect";
+                if (char === " ") {typed_char = "␣"}
+              }
             }
             
             return (
               <span key={index} className={correct_name}>
                 {index === typed_quote.length && !finished_ref.current && <span className="cursor"></span>}
-                {char}
+                {typed_char ?? char}
               </span>
             );
             
