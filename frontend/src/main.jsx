@@ -75,12 +75,10 @@ function Typing_design() {
         set_typed_quote(updated);
         set_end_time(Date.now());
 
-        const quote_words = quote.trim().split(/\s+/);
-        const typed_words = updated.trim().split(/\s+/);
-        const last_word_index = quote_words.length - 1;
-        const last_quote_word = quote_words[last_word_index];
-        const last_typed_word = typed_words[last_word_index] || "";
-        if (last_typed_word.length >= last_quote_word.length) {
+        const last_quote_index = quote.length - 1;
+        const last_quote_char = quote[last_quote_index];
+        const last_typed_char = updated[last_quote_index] || "";
+        if (updated.length - 1 >= last_quote_index && last_typed_char === last_quote_char) {
           End_typing(updated);
         }
       } else if (e.key.length === 1) {
@@ -91,12 +89,10 @@ function Typing_design() {
           End_typing(updated);
         }
 
-        const quote_words = quote.trim().split(/\s+/);
-        const typed_words = updated.trim().split(/\s+/);
-        const last_word_index = quote_words.length - 1;
-        const last_quote_word = quote_words[last_word_index];
-        const last_typed_word = typed_words[last_word_index] || "";
-        if (last_typed_word.length >= last_quote_word.length) {
+        const last_quote_index = quote.length - 1;
+        const last_quote_char = quote[last_quote_index];
+        const last_typed_char = updated[last_quote_index] || "";
+        if (updated.length - 1 >= last_quote_index && last_typed_char === last_quote_char) {
           End_typing(updated);
         }
       } else if (e.key === "Backspace") {
@@ -146,20 +142,21 @@ function Typing_design() {
         <p className="quote">
           {quote.split("").map((char, index) => {
             let typed_char = typed_quote[index]; 
+            let sub_char = null;
             let correct_name = ""; 
             if (typed_char != null) {
               if (typed_char === char) {
                 correct_name = "correct";
               } else {
                 correct_name = "incorrect";
-                if (char === " ") {typed_char = "␣"}
+                if (char === " ") {sub_char = typed_char}
               }
             }
             
             return (
               <span key={index} className={correct_name}>
                 {index === typed_quote.length && !finished_ref.current && <span className="cursor"></span>}
-                {typed_char ?? char}
+                {sub_char ?? char}
               </span>
             );
             
