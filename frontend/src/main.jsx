@@ -37,6 +37,23 @@ function Typing_design() {
   }
 
   useEffect(() => {
+    const payload = {
+      accountid: 1,
+      username: "purrlet",
+      firstname: "amy",
+      lastname: "thompson",
+      password: "mfzgmlnzbutnhdufpvvhlzdeayxzxmxjuzugkxuzknqjpbxtfxncibegvbjsgcxl",
+      email: "amy@amypthompson.com"
+    };
+
+    fetch("http://localhost:8081/api/typing/user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
+
     Load_quote();
   }, []);
 
