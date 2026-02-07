@@ -1,8 +1,7 @@
-{/*import { StrictMode } from 'react'*/}
 import { createRoot } from "react-dom/client";
 import { useState, useEffect, useRef } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
-{/*import App from './App.jsx'*/}
 
 function Typing_design() {
   const [quote, set_quote] = useState("");
@@ -22,7 +21,7 @@ function Typing_design() {
     try {
       await Fetch_quote();
     } catch {
-      set_quote("Failed to load quote. Refresh or check your Internet connection.");
+      set_quote("Failed to load quote. Refresh or check your Internet connection. Failed to load quote. Refresh or check your Internet connection. Failed to load quote. Refresh or check your Internet connection. Failed to load quote. Refresh or check your Internet connection.");
     }
   }
 
@@ -149,59 +148,58 @@ function Typing_design() {
 
   return (
     <>
-      <div className="header">
-        <ul className="headerlink">
-          <li><b>typing...</b></li>
-        </ul>
-        <li className="headerright">o</li>
+      <div className="stickyheader container-fluid align-items-center d-flex flex-row justify-content-between px-4 py-1">
+        <p className="headerlink fs-4 mb-0"><b>typing...</b></p>
+        <p className="headerright fs-2 mb-0">o</p>
       </div>
-      <div className="quotebox">
-        <p className="quote">
-          {quote.split("").map((char, index) => {
-            let typed_char = typed_quote[index]; 
-            let sub_char = null;
-            let correct_name = ""; 
-            if (typed_char != null) {
-              if (typed_char === char) {
-                correct_name = "correct";
-              } else {
-                correct_name = "incorrect";
-                if (char === " ") {sub_char = typed_char}
+      <div className="min-vh-100 d-flex flex-column justify-content-center">
+        <div className="quotebox container align-items-center">
+          <p className="quote text-center fs-4 py-3">
+            {quote.split("").map((char, index) => {
+              let typed_char = typed_quote[index]; 
+              let sub_char = null;
+              let correct_name = ""; 
+              if (typed_char != null) {
+                if (typed_char === char) {
+                  correct_name = "correct";
+                } else {
+                  correct_name = "incorrect";
+                  if (char === " ") {sub_char = typed_char}
+                }
               }
-            }
-            
-            return (
-              <span key={index} className={correct_name}>
-                {index === typed_quote.length && !finished_ref.current && <span className="cursor"></span>}
-                {sub_char ?? char}
-              </span>
-            );
-            
-          })}
-        </p>
-        <p onClick={Reset_fetch} className="newquote"><b>New quote?</b></p>
-      </div>
+              
+              return (
+                <span key={index} className={correct_name}>
+                  {index === typed_quote.length && !finished_ref.current && <span className="cursor"></span>}
+                  {sub_char ?? char}
+                </span>
+              );
+            })}
+          </p>
+          <p onClick={Reset_fetch} className="newquote text-end lh-1"><b>New quote?</b></p>
+        </div>
 
-      <div>
-        {result && (
-          <div className = "resultbox">
-            <div className = "result">
-              <div className="wpmextra">
-                <p>Raw WPM: <b>{result.raw_wpm}</b></p>
-                <p>Accuracy%: <b>{result.accuracy}</b></p>
+        <div>
+          {result || (
+            <div className = "resultbox container d-flex flex-row justify-content-center gap-4">
+              <div className= "wpmextra text-center text-md-start d-flex flex-column">
+                <p className="mb-0">Raw WPM: </p>
+                <p className="mb-0">Accuracy%: </p>
                 <div className="wpmlinks">
-                  <p className="morestats"><b>More stats...</b></p>
-                  <p onClick={Reset_fetch} className="redo"><b>Redo?</b></p>
+                  <p className="morestats mb-0"><b>More stats...</b></p>
+                  <p onClick={Reset_fetch} className="redo mb-0"><b>Redo?</b></p>
                 </div>
               </div>
-              <p className="wpm">WPM<br></br><b>{result.wpm}</b></p>
+              <div>
+                <p className="wpm container mb-0">WPM<br></br>2</p>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      <div> 
-        <a href="https://github.com/amypearlt/typer" target="_blank">GitHub</a>
+        <div> 
+          <a href="https://github.com/amypearlt/typer" target="_blank">GitHub</a>
+        </div>
       </div>
     </>
   );
