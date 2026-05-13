@@ -36,22 +36,6 @@ function Typing_design() {
   }
 
   useEffect(() => {
-    const payload = {
-      accountid: 1,
-      username: "purrlet",
-      firstname: "amy",
-      lastname: "thompson",
-      password: "mfzgmlnzbutnhdufpvvhlzdeayxzxmxjuzugkxuzknqjpbxtfxncibegvbjsgcxl",
-      email: "amy@amypthompson.com"
-    };
-
-    fetch("http://localhost:8081/api/typing/user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
-      .then(res => res.json())
-      .then(data => console.log(data));
 
     Load_quote();
   }, []);
@@ -145,7 +129,7 @@ function Typing_design() {
     const data = await response.json();
     set_result(data);
   }
-
+  
   return (
     <>
       <div className="stickyheader container-fluid align-items-center d-flex flex-row justify-content-between px-4 py-1">
@@ -154,7 +138,7 @@ function Typing_design() {
       </div>
       <div className="min-vh-100 d-flex flex-column justify-content-center">
         <div className="quotebox container align-items-center">
-          <p className="quote text-center fs-4 py-3">
+          <p className="quote text-center px-2 py-3 fs-4">
             {quote.split("").map((char, index) => {
               let typed_char = typed_quote[index]; 
               let sub_char = null;
@@ -176,22 +160,22 @@ function Typing_design() {
               );
             })}
           </p>
-          <p onClick={Reset_fetch} className="newquote text-end lh-1"><b>New quote?</b></p>
+          <p onClick={Reset_fetch} className="newquote text-end mt-0"><b>New quote?</b></p>
         </div>
 
         <div>
-          {result || (
+          {result && (
             <div className = "resultbox container d-flex flex-row justify-content-center gap-4">
               <div className= "wpmextra text-center text-md-start d-flex flex-column">
-                <p className="mb-0">Raw WPM: </p>
-                <p className="mb-0">Accuracy%: </p>
+                <p className="mb-0">Raw WPM: <b>{result.raw_wpm}</b></p>
+                <p className="mb-0">Accuracy%: <b>{result.accuracy}</b></p>
                 <div className="wpmlinks">
                   <p className="morestats mb-0"><b>More stats...</b></p>
                   <p onClick={Reset_fetch} className="redo mb-0"><b>Redo?</b></p>
                 </div>
               </div>
               <div>
-                <p className="wpm container mb-0">WPM<br></br>2</p>
+                <p className="wpm container mb-0">WPM<br></br><b>{result.wpm}</b></p>
               </div>
             </div>
           )}
